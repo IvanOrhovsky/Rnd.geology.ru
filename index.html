@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Александр Морозов — Консультант</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0e1b2e;
+      --navy-mid: #1a2d47;
+      --gold: #c5a55a;
+      --gold-light: #d9bf8a;
+      --cream: #f5f0e8;
+      --cream-dark: #ede5d4;
+      --text: #2c2c2c;
+      --muted: #7a7060;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: relative;
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(197,165,90,0.08) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 59px,
+          rgba(197,165,90,0.04) 59px,
+          rgba(197,165,90,0.04) 60px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 59px,
+          rgba(197,165,90,0.04) 59px,
+          rgba(197,165,90,0.04) 60px
+        );
+      pointer-events: none;
+    }
+
+    .header-ornament {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      margin: 0 auto 32px;
+      animation: fadeDown 1.2s ease forwards;
+      opacity: 0;
+    }
+
+    .header-tag {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      animation: fadeUp 1s 0.3s ease forwards;
+      opacity: 0;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 1.05;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+      animation: fadeUp 1s 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .header-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 32px auto;
+      width: 180px;
+      animation: fadeUp 1s 0.7s ease forwards;
+      opacity: 0;
+    }
+    .header-divider span { flex: 1; height: 1px; background: rgba(197,165,90,0.4); }
+    .header-divider i { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+    .tagline {
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.55);
+      animation: fadeUp 1s 0.9s ease forwards;
+      opacity: 0;
+    }
+
+    .scroll-cta {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: fadeUp 1s 1.4s ease forwards;
+      opacity: 0;
+      text-decoration: none;
+      color: rgba(245,240,232,0.4);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+    .scroll-cta::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(197,165,90,0.5), transparent);
+      animation: pulse 2s infinite;
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 100px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-photo {
+      position: relative;
+    }
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--navy-mid);
+      border: 1px solid rgba(197,165,90,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px;
+      color: rgba(197,165,90,0.2);
+      letter-spacing: -0.02em;
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(197,165,90,0.1);
+    }
+    .photo-caption {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 10px 20px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .about-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 28px;
+    }
+    .about-text p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ─── EXPERTISE ─── */
+    .expertise-section {
+      background: var(--navy);
+      max-width: 100%;
+      padding: 100px 40px;
+    }
+    .expertise-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .expertise-section .section-label { color: var(--gold); }
+    .expertise-section .section-label::after { background: var(--gold); }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .expertise-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(197,165,90,0.12);
+      padding: 40px 32px;
+      transition: background 0.3s, border-color 0.3s;
+      cursor: default;
+    }
+    .expertise-card:hover {
+      background: rgba(197,165,90,0.06);
+      border-color: rgba(197,165,90,0.3);
+    }
+
+    .expertise-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(197,165,90,0.2);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .expertise-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+    .expertise-card p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(245,240,232,0.45);
+    }
+
+    /* ─── STATS ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid rgba(197,165,90,0.2);
+      margin-top: 60px;
+    }
+    .stat {
+      padding: 40px;
+      text-align: center;
+      border-right: 1px solid rgba(197,165,90,0.15);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+
+    /* ─── CONTACTS ─── */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contacts-grid h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .contacts-grid p {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .contact-list { list-style: none; }
+    .contact-list li {
+      display: flex;
+      flex-direction: column;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+    .contact-list li:first-child { border-top: 1px solid var(--cream-dark); }
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .contact-value {
+      font-size: 15px;
+      color: var(--navy);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-value:hover { color: var(--gold); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      text-align: center;
+      padding: 40px;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: rgba(245,240,232,0.2);
+      text-transform: uppercase;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(14,27,46,0.97);
+      padding: 14px 48px;
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .about-grid, .contacts-grid { grid-template-columns: 1fr; }
+      .expertise-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid rgba(197,165,90,0.15); }
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-logo">А.М.</div>
+    <div class="nav-links">
+      <a href="#about">О себе</a>
+      <a href="#expertise">Экспертиза</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header>
+    <div class="header-ornament"></div>
+    <div class="header-tag">Бизнес-консультант · Москва</div>
+    <h1>Александр<br><em>Морозов</em></h1>
+    <div class="header-divider">
+      <span></span><i></i><span></span>
+    </div>
+    <div class="tagline">Стратегия · Развитие · Результат</div>
+    <a href="#about" class="scroll-cta">Далее</a>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label reveal">О себе</div>
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <div class="photo-frame">АМ</div>
+        <div class="photo-caption">с 2010 года</div>
+      </div>
+      <div class="about-text reveal">
+        <h2>Профессиональный подход к вашему делу</h2>
+        <p>Более 15 лет я помогаю компаниям выстраивать эффективные бизнес-процессы, находить точки роста и уверенно выходить на новые рынки.</p>
+        <p>Работаю с предприятиями малого и среднего бизнеса, стартапами и государственными структурами. Каждый проект — это индивидуальная стратегия, основанная на глубоком анализе и многолетнем опыте.</p>
+        <p>Убеждён: честная экспертиза и долгосрочное партнёрство дают лучший результат, чем быстрые решения.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERTISE -->
+  <div class="expertise-section">
+    <div class="expertise-inner">
+      <div class="section-label reveal">Экспертиза</div>
+      <div class="expertise-grid">
+        <div class="expertise-card reveal">
+          <div class="expertise-num">01</div>
+          <h3>Стратегическое планирование</h3>
+          <p>Разработка долгосрочных стратегий, бизнес-моделей и планов развития компании.</p>
+        </div>
+        <div class="expertise-card reveal">
+          <div class="expertise-num">02</div>
+          <h3>Финансовый анализ</h3>
+          <p>Оценка финансового состояния, оптимизация затрат и привлечение инвестиций.</p>
+        </div>
+        <div class="expertise-card reveal">
+          <div class="expertise-num">03</div>
+          <h3>Операционная эффективность</h3>
+          <p>Реструктуризация процессов, внедрение KPI и систем управления качеством.</p>
+        </div>
+      </div>
+      <div class="stats-row reveal">
+        <div class="stat">
+          <div class="stat-num">150+</div>
+          <div class="stat-label">Проектов</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">15</div>
+          <div class="stat-label">Лет опыта</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Довольных клиентов</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <section id="contacts">
+    <div class="section-label reveal">Контакты</div>
+    <div class="contacts-grid">
+      <div class="reveal">
+        <h2>Готов обсудить ваш проект</h2>
+        <p>Если у вас есть задача, требующая профессионального взгляда, — напишите или позвоните. Первая консультация бесплатна.</p>
+      </div>
+      <div class="reveal">
+        <ul class="contact-list">
+          <li>
+            <span class="contact-label">Телефон</span>
+            <a href="tel:+79001234567" class="contact-value">+7 (900) 123-45-67</a>
+          </li>
+          <li>
+            <span class="contact-label">Email</span>
+            <a href="mailto:a.morozov@example.com" class="contact-value">a.morozov@example.com</a>
+          </li>
+          <li>
+            <span class="contact-label">Telegram</span>
+            <a href="https://t.me/morozov_consult" class="contact-value">@morozov_consult</a>
+          </li>
+          <li>
+            <span class="contact-label">Город</span>
+            <span class="contact-value">Москва, Россия</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Александр Морозов &nbsp;·&nbsp; Все права защищены
+  </footer>
+
+  <script>
+    // Nav on scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
