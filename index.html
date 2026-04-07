@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ИП Рихтер О.В. — Инженерно-геологические изыскания · Ростов-на-Дону</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geologica:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:    #111009;
+      --dark2:   #1c1a14;
+      --dark3:   #252219;
+      --ochre:   #c8841a;
+      --amber:   #e8a82e;
+      --sand:    #d4b896;
+      --stone:   #8c7d6a;
+      --light:   #f0ebe2;
+      --muted:   #9a8e7e;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Geologica', sans-serif;
+      font-weight: 300;
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+    }
+
+    /* ─── UTILITY ─── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+    @media(max-width:700px){ .container { padding: 0 24px; } }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, padding 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(17,16,9,0.96);
+      padding: 14px 48px;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,132,26,0.15);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 38px; height: 38px;
+      border: 2px solid var(--ochre);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px; color: var(--ochre); letter-spacing: 0.05em;
+    }
+    .nav-brand-text { line-height: 1; }
+    .nav-brand-text strong { display: block; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; color: var(--light); }
+    .nav-brand-text span { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,235,226,0.5); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta {
+      background: var(--ochre); color: var(--dark); padding: 10px 22px;
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      font-weight: 500; text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--amber); }
+    @media(max-width:900px){ .nav-links { display: none; } }
+    @media(max-width:700px){ nav { padding: 16px 24px; } nav.scrolled { padding: 12px 24px; } }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: flex-end;
+      padding-bottom: 80px;
+      overflow: hidden;
+    }
+
+    /* soil layer stripes - decorative bg */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg,
+          rgba(17,16,9,0.0) 0%,
+          rgba(17,16,9,0.6) 60%,
+          rgba(17,16,9,1) 100%
+        ),
+        /* soil layers */
+        repeating-linear-gradient(
+          180deg,
+          rgba(180,120,40,0.07) 0px,
+          rgba(180,120,40,0.07) 18px,
+          rgba(100,70,20,0.04) 18px,
+          rgba(100,70,20,0.04) 40px,
+          rgba(60,45,20,0.08) 40px,
+          rgba(60,45,20,0.08) 55px,
+          rgba(0,0,0,0) 55px,
+          rgba(0,0,0,0) 80px
+        ),
+        /* rock texture dot grid */
+        radial-gradient(circle at 1px 1px, rgba(200,132,26,0.06) 1px, transparent 0),
+        /* base */
+        linear-gradient(160deg, #1e1a0f 0%, #0e0d08 60%, #1a1608 100%);
+      background-size: 100% 100%, 100% 80px, 30px 30px, 100% 100%;
+    }
+
+    /* drill rig silhouette */
+    .rig-svg {
+      position: absolute;
+      right: 8%;
+      bottom: 0;
+      height: 85vh;
+      opacity: 0.12;
+      pointer-events: none;
+      transform-origin: bottom center;
+      animation: rigSettle 3s ease forwards;
+    }
+
+    @keyframes rigSettle {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 0.12; transform: translateY(0); }
+    }
+
+    /* geo stratum lines on right */
+    .strata {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
+      display: flex; flex-direction: column;
+      overflow: hidden; opacity: 0.4;
+    }
+    .strata-line {
+      flex: 1;
+      border-top: 1px solid;
+      transform: scaleX(0);
+      transform-origin: right;
+      animation: strataDraw 1.5s ease forwards;
+    }
+    .strata-line:nth-child(1){ border-color: #c8841a; animation-delay: 0.4s; }
+    .strata-line:nth-child(2){ border-color: #8c6030; animation-delay: 0.6s; }
+    .strata-line:nth-child(3){ border-color: #5a3e1e; animation-delay: 0.8s; }
+    .strata-line:nth-child(4){ border-color: #c8841a; animation-delay: 1.0s; }
+    .strata-line:nth-child(5){ border-color: #6e5030; animation-delay: 1.2s; }
+    .strata-line:nth-child(6){ border-color: #3a2810; animation-delay: 1.4s; }
+    .strata-line:nth-child(7){ border-color: #c8841a; animation-delay: 1.6s; }
+    @keyframes strataDraw {
+      to { transform: scaleX(1); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--ochre); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0; animation: fadeUp 0.9s 0.3s ease forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 40px; height: 1px; background: var(--ochre);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.92; letter-spacing: 0.02em;
+      color: var(--light);
+      opacity: 0; animation: fadeUp 1s 0.5s ease forwards;
+    }
+    .hero h1 .accent { color: var(--ochre); }
+    .hero h1 .line2 { display: block; margin-left: clamp(20px, 5vw, 80px); }
+
+    .hero-sub {
+      margin-top: 32px; max-width: 500px;
+      font-size: 15px; line-height: 1.8; color: rgba(240,235,226,0.6);
+      opacity: 0; animation: fadeUp 1s 0.7s ease forwards;
+    }
+
+    .hero-actions {
+      margin-top: 44px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 1s 0.9s ease forwards;
+    }
+    .btn-primary {
+      background: var(--ochre); color: var(--dark);
+      padding: 16px 36px; font-size: 12px; letter-spacing: 0.25em;
+      text-transform: uppercase; font-weight: 500;
+      text-decoration: none; transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--amber); transform: translateY(-2px); }
+    .btn-outline {
+      color: var(--light); border: 1px solid rgba(240,235,226,0.3);
+      padding: 16px 36px; font-size: 12px; letter-spacing: 0.25em;
+      text-transform: uppercase; font-weight: 400;
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--ochre); color: var(--ochre); }
+
+    .hero-badges {
+      position: absolute; bottom: 80px; right: 48px;
+      display: flex; flex-direction: column; gap: 4px; z-index: 2;
+      opacity: 0; animation: fadeUp 1s 1.2s ease forwards;
+    }
+    .badge {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px;
+      background: rgba(28,26,20,0.85);
+      border-left: 3px solid var(--ochre);
+      backdrop-filter: blur(6px);
+    }
+    .badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; color: var(--amber); line-height: 1;
+    }
+    .badge-txt { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); line-height: 1.4; text-transform: uppercase; }
+
+    @media(max-width:900px){ .hero-badges { display: none; } }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 100px 0; }
+    .sec-label {
+      font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--ochre); margin-bottom: 16px;
+    }
+    .sec-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1; letter-spacing: 0.03em;
+      color: var(--light); margin-bottom: 24px;
+    }
+    .sec-body {
+      font-size: 15px; line-height: 1.9; color: var(--muted); max-width: 560px;
+    }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--dark2); }
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px; gap: 40px; flex-wrap: wrap;
+    }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    }
+    @media(max-width:800px){ .services-grid { grid-template-columns: 1fr; } }
+
+    .service-card {
+      background: var(--dark3); padding: 48px 36px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+      cursor: default; position: relative; overflow: hidden;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--ochre), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover { border-color: var(--ochre); background: #201e14; }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px; height: 52px; margin-bottom: 28px;
+      position: relative;
+    }
+    .service-icon svg { width: 100%; height: 100%; }
+
+    .service-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem; letter-spacing: 0.05em;
+      color: var(--light); margin-bottom: 14px; line-height: 1.1;
+    }
+    .service-card p { font-size: 14px; line-height: 1.85; color: var(--muted); }
+
+    .service-tag {
+      display: inline-block; margin-top: 24px;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ochre); border: 1px solid rgba(200,132,26,0.3);
+      padding: 5px 12px;
+    }
+
+    /* ─── FIELDWORK HIGHLIGHT ─── */
+    #fieldwork {
+      background: var(--dark);
+      border-top: 1px solid rgba(200,132,26,0.1);
+      border-bottom: 1px solid rgba(200,132,26,0.1);
+    }
+    .fieldwork-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    @media(max-width:800px){ .fieldwork-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+    .fieldwork-visual {
+      position: relative; aspect-ratio: 1; background: var(--dark3);
+      border: 1px solid rgba(200,132,26,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Soil section diagram */
+    .soil-diagram {
+      width: 80%; height: 80%;
+      display: flex; flex-direction: column;
+      gap: 3px; padding: 16px;
+      position: relative;
+    }
+    .layer {
+      flex: 1; display: flex; align-items: center;
+      padding: 0 16px; gap: 12px;
+      position: relative;
+    }
+    .layer-bar { width: 6px; height: 100%; flex-shrink: 0; }
+    .layer-label {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--stone);
+    }
+    .layer-depth {
+      position: absolute; right: 16px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; color: rgba(200,132,26,0.4);
+    }
+    .l1 { background: rgba(200,160,80,0.25); }
+    .l1 .layer-bar { background: #c8a050; }
+    .l2 { background: rgba(160,110,40,0.2); }
+    .l2 .layer-bar { background: #a06828; }
+    .l3 { background: rgba(120,80,30,0.2); }
+    .l3 .layer-bar { background: #783c14; }
+    .l4 { background: rgba(80,55,25,0.25); }
+    .l4 .layer-bar { background: #503219; }
+    .l5 { background: rgba(50,35,15,0.3); }
+    .l5 .layer-bar { background: #2d1e0a; }
+
+    .diagram-drill {
+      position: absolute; top: -10px; left: 50%;
+      width: 3px; height: calc(100% + 10px);
+      background: linear-gradient(to bottom, var(--ochre), rgba(200,132,26,0.1));
+      transform: translateX(-50%);
+      animation: drillDown 2.5s ease-in-out infinite;
+    }
+    @keyframes drillDown {
+      0%, 100% { height: 30%; }
+      60% { height: calc(100% + 10px); }
+    }
+
+    .fieldwork-text .feature-list {
+      list-style: none; margin-top: 36px; display: flex; flex-direction: column; gap: 2px;
+    }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 18px 20px; background: var(--dark2);
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .feature-list li:hover { border-color: var(--ochre); background: var(--dark3); }
+    .feature-list li::before {
+      content: '▸'; color: var(--ochre); flex-shrink: 0; margin-top: 2px; font-size: 12px;
+    }
+    .feature-list li span { font-size: 14px; line-height: 1.7; color: rgba(240,235,226,0.7); }
+
+    /* ─── EQUIPMENT ─── */
+    #equipment { background: var(--dark2); }
+    .eq-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 56px;
+    }
+    @media(max-width:800px){ .eq-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:480px){ .eq-grid { grid-template-columns: 1fr; } }
+
+    .eq-card {
+      background: var(--dark3); padding: 36px 28px;
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: background 0.3s;
+    }
+    .eq-card:hover { background: #201e14; }
+    .eq-icon {
+      width: 40px; height: 40px; margin-bottom: 20px;
+      color: var(--ochre);
+    }
+    .eq-card h4 {
+      font-size: 14px; font-weight: 500; color: var(--light);
+      letter-spacing: 0.03em; margin-bottom: 8px;
+    }
+    .eq-card p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    /* ─── ABOUT / CONTACT ─── */
+    #contacts { background: var(--dark); }
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    @media(max-width:800px){ .contact-layout { grid-template-columns: 1fr; gap: 48px; } }
+
+    .about-card {
+      background: var(--dark2); padding: 48px;
+      border: 1px solid rgba(200,132,26,0.12);
+    }
+    .about-card .ip-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem; color: var(--ochre); letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .about-card .ip-full {
+      font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 28px; padding-bottom: 28px;
+      border-bottom: 1px solid rgba(200,132,26,0.15);
+    }
+    .about-card p {
+      font-size: 14px; line-height: 1.9; color: rgba(240,235,226,0.6);
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 2px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px 24px; background: var(--dark2);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-item:hover { border-color: var(--ochre); background: var(--dark3); }
+    .contact-item-icon {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: rgba(200,132,26,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ochre);
+    }
+    .contact-item-icon svg { width: 18px; height: 18px; }
+    .ci-label {
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted); display: block; margin-bottom: 3px;
+    }
+    .ci-value {
+      font-size: 15px; color: var(--light); font-weight: 400;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark2);
+      border-top: 1px solid rgba(200,132,26,0.15);
+      padding: 36px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem; letter-spacing: 0.15em;
+      color: rgba(240,235,226,0.25);
+    }
+    .footer-copy {
+      font-size: 11px; letter-spacing: 0.15em;
+      color: rgba(240,235,226,0.2);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-brand">
+      <div class="nav-brand-text">
+        <strong>ИП Рихтер О.В.</strong>
+        <span>Геологические изыскания</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Услуги</a>
+      <a href="#fieldwork">Полевые работы</a>
+      <a href="#equipment">Оборудование</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+    <a href="tel:+79185824281" class="nav-cta">Позвонить</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Drill rig SVG silhouette -->
+    <svg class="rig-svg" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tower legs -->
+      <line x1="100" y1="20" x2="60" y2="580" stroke="#c8841a" stroke-width="3"/>
+      <line x1="100" y1="20" x2="140" y2="580" stroke="#c8841a" stroke-width="3"/>
+      <!-- Cross braces -->
+      <line x1="65" y1="150" x2="135" y2="150" stroke="#c8841a" stroke-width="2"/>
+      <line x1="60" y1="580" x2="140" y2="580" stroke="#c8841a" stroke-width="3"/>
+      <line x1="67" y1="250" x2="133" y2="250" stroke="#c8841a" stroke-width="2"/>
+      <line x1="70" y1="350" x2="130" y2="350" stroke="#c8841a" stroke-width="2"/>
+      <line x1="73" y1="450" x2="127" y2="450" stroke="#c8841a" stroke-width="2"/>
+      <line x1="65" y1="150" x2="73" y2="250" stroke="#c8841a" stroke-width="1.5"/>
+      <line x1="135" y1="150" x2="127" y2="250" stroke="#c8841a" stroke-width="1.5"/>
+      <line x1="73" y1="250" x2="80" y2="350" stroke="#c8841a" stroke-width="1.5"/>
+      <line x1="127" y1="250" x2="120" y2="350" stroke="#c8841a" stroke-width="1.5"/>
+      <!-- Top pulley -->
+      <circle cx="100" cy="28" r="14" stroke="#c8841a" stroke-width="2" fill="none"/>
+      <circle cx="100" cy="28" r="6" stroke="#c8841a" stroke-width="1.5" fill="none"/>
+      <!-- Crown block -->
+      <rect x="80" y="14" width="40" height="8" stroke="#c8841a" stroke-width="1.5" fill="none"/>
+      <!-- Drill string -->
+      <line x1="100" y1="42" x2="100" y2="600" stroke="#e8a82e" stroke-width="2" stroke-dasharray="8 4"/>
+      <!-- Base platform -->
+      <rect x="40" y="570" width="120" height="12" stroke="#c8841a" stroke-width="2" fill="none"/>
+      <!-- Engine block -->
+      <rect x="30" y="520" width="50" height="50" stroke="#c8841a" stroke-width="1.5" fill="none"/>
+      <line x1="30" y1="535" x2="80" y2="535" stroke="#c8841a" stroke-width="1"/>
+      <line x1="30" y1="550" x2="80" y2="550" stroke="#c8841a" stroke-width="1"/>
+    </svg>
+
+    <div class="strata">
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+      <div class="strata-line"></div>
+    </div>
+
+    <div class="hero-content container">
+      <div class="hero-eyebrow">Ростов-на-Дону · Инженерная геология</div>
+      <h1>
+        Буровые<br>
+        <span class="accent">Изыс</span>кания<br>
+        <span class="line2">Грунтов</span>
+      </h1>
+      <p class="hero-sub">
+        Полный цикл инженерно-геологических изысканий — от бурения скважин и полевых испытаний до лабораторных исследований грунтов. Собственный автопарк и опытные специалисты.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacts" class="btn-primary">Получить расчёт</a>
+        <a href="#services" class="btn-outline">Наши услуги</a>
+      </div>
+    </div>
+
+    <div class="hero-badges">
+      <div class="badge">
+        <div class="badge-num">15+</div>
+        <div class="badge-txt">лет<br>опыта</div>
+      </div>
+      <div class="badge">
+        <div class="badge-num">500+</div>
+        <div class="badge-txt">объектов<br>исследовано</div>
+      </div>
+      <div class="badge">
+        <div class="badge-num">РнД</div>
+        <div class="badge-txt">и регионы<br>юга России</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header">
+        <div>
+          <div class="sec-label reveal">Что мы делаем</div>
+          <div class="sec-title reveal reveal-d1">Полный спектр<br>изыскательских работ</div>
+        </div>
+        <p class="sec-body reveal reveal-d2">Выполняем инженерно-геологические изыскания для строительства жилых, промышленных объектов, дорог и инфраструктуры по всей Ростовской области.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="26" r="24" stroke="#c8841a" stroke-width="1.5" opacity="0.3"/>
+              <line x1="26" y1="4" x2="26" y2="48" stroke="#c8841a" stroke-width="2.5"/>
+              <line x1="20" y1="14" x2="32" y2="14" stroke="#e8a82e" stroke-width="2"/>
+              <line x1="20" y1="22" x2="32" y2="22" stroke="#e8a82e" stroke-width="1.5"/>
+              <line x1="20" y1="30" x2="32" y2="30" stroke="#e8a82e" stroke-width="1.5"/>
+              <line x1="20" y1="38" x2="32" y2="38" stroke="#e8a82e" stroke-width="2"/>
+              <polygon points="22,48 26,56 30,48" fill="#c8841a"/>
+            </svg>
+          </div>
+          <h3>Бурение геологических скважин</h3>
+          <p>Бурение инженерно-геологических скважин глубиной до 40 м. Отбор монолитов и образцов грунта, документация разрезов по ГОСТ.</p>
+          <span class="service-tag">Полевые работы</span>
+        </div>
+
+        <div class="service-card reveal reveal-d1">
+          <div class="service-icon">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="8" width="32" height="38" rx="1" stroke="#c8841a" stroke-width="1.5" opacity="0.4"/>
+              <rect x="14" y="14" width="24" height="6" fill="rgba(200,132,26,0.2)" stroke="#c8841a" stroke-width="1"/>
+              <rect x="14" y="24" width="24" height="6" fill="rgba(160,100,40,0.2)" stroke="#a06828" stroke-width="1"/>
+              <rect x="14" y="34" width="24" height="6" fill="rgba(80,50,20,0.2)" stroke="#503214" stroke-width="1"/>
+              <circle cx="38" cy="12" r="7" fill="var(--dark3)" stroke="#e8a82e" stroke-width="1.5"/>
+              <text x="38" y="16" text-anchor="middle" fill="#e8a82e" font-size="9" font-family="Bebas Neue">λ</text>
+            </svg>
+          </div>
+          <h3>Лабораторные исследования</h3>
+          <p>Определение физико-механических характеристик грунтов: плотность, влажность, пластичность, сжимаемость, прочность. Составление технических отчётов.</p>
+          <span class="service-tag">Лаборатория</span>
+        </div>
+
+        <div class="service-card reveal reveal-d2">
+          <div class="service-icon">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="26" r="22" stroke="#c8841a" stroke-width="1.5" opacity="0.3"/>
+              <path d="M10 26 Q18 16 26 26 Q34 36 42 26" stroke="#e8a82e" stroke-width="2" fill="none"/>
+              <circle cx="16" cy="24" r="3" fill="#c8841a"/>
+              <circle cx="26" cy="30" r="3" fill="#c8841a"/>
+              <circle cx="36" cy="22" r="3" fill="#c8841a"/>
+              <line x1="26" y1="4" x2="26" y2="10" stroke="#c8841a" stroke-width="2"/>
+              <line x1="26" y1="42" x2="26" y2="48" stroke="#c8841a" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Полевые испытания грунтов</h3>
+          <p>Статическое и динамическое зондирование, штамповые испытания, отбор проб подземных вод. Определение несущей способности грунтов in situ.</p>
+          <span class="service-tag">In situ</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FIELDWORK HIGHLIGHT -->
+  <section id="fieldwork">
+    <div class="container">
+      <div class="fieldwork-grid">
+        <div class="fieldwork-visual reveal">
+          <div class="soil-diagram">
+            <div class="layer l1"><div class="layer-bar"></div><div class="layer-label">Почвенно-растительный</div><div class="layer-depth">0.0–0.3</div></div>
+            <div class="layer l2"><div class="layer-bar"></div><div class="layer-label">Суглинок мягкопластичный</div><div class="layer-depth">0.3–2.5</div></div>
+            <div class="layer l3"><div class="layer-bar"></div><div class="layer-label">Суглинок тугопластичный</div><div class="layer-depth">2.5–6.0</div></div>
+            <div class="layer l4"><div class="layer-bar"></div><div class="layer-label">Глина полутвёрдая</div><div class="layer-depth">6.0–12.0</div></div>
+            <div class="layer l5"><div class="layer-bar"></div><div class="layer-label">Известняк трещиноватый</div><div class="layer-depth">12.0+</div></div>
+            <div class="diagram-drill"></div>
+          </div>
+        </div>
+        <div class="fieldwork-text reveal reveal-d1">
+          <div class="sec-label">Основное направление</div>
+          <div class="sec-title">Полевые работы — наша специализация</div>
+          <p class="sec-body">Располагаем собственным современным буровым оборудованием и большим парком спецтехники. Выезжаем на объект в кратчайшие сроки.</p>
+          <ul class="feature-list">
+            <li><span>Бурение скважин роторным, ударно-канатным и шнековым методами</span></li>
+            <li><span>Отбор монолитов грунта и образцов нарушенной структуры</span></li>
+            <li><span>Гидрогеологические наблюдения и замеры уровней ГВ</span></li>
+            <li><span>Статическое зондирование (CPT) для оценки несущей способности</span></li>
+            <li><span>Работа на сложных и труднодоступных участках</span></li>
+            <li><span>Быстрая мобилизация — обширный автопарк спецтехники</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPMENT -->
+  <section id="equipment">
+    <div class="container">
+      <div class="sec-label reveal">Техника и ресурсы</div>
+      <div class="sec-title reveal reveal-d1">Обширный автопарк<br>и оснащение</div>
+      <div class="eq-grid">
+        <div class="eq-card reveal">
+          <svg class="eq-icon" viewBox="0 0 40 40" fill="none">
+            <rect x="5" y="28" width="30" height="8" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="20" y1="4" x2="20" y2="28" stroke="currentColor" stroke-width="2"/>
+            <line x1="14" y1="10" x2="26" y2="10" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="14" y1="18" x2="26" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="20" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <h4>Буровые установки</h4>
+          <p>Несколько единиц буровой техники для работы на различных типах грунтов</p>
+        </div>
+        <div class="eq-card reveal reveal-d1">
+          <svg class="eq-icon" viewBox="0 0 40 40" fill="none">
+            <rect x="4" y="22" width="32" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="10" cy="34" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="30" cy="34" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="14" y="14" width="18" height="10" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="4" y1="22" x2="14" y2="14" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <h4>Автопарк спецтехники</h4>
+          <p>Грузовые автомобили, вездеходы и вспомогательный транспорт для доставки</p>
+        </div>
+        <div class="eq-card reveal reveal-d2">
+          <svg class="eq-icon" viewBox="0 0 40 40" fill="none">
+            <rect x="8" y="8" width="24" height="28" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="12" y="14" width="16" height="4" stroke="currentColor" stroke-width="1"/>
+            <rect x="12" y="22" width="16" height="4" stroke="currentColor" stroke-width="1"/>
+            <circle cx="28" cy="10" r="5" fill="#111009" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="26" y1="8" x2="30" y2="12" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <h4>Лабораторное оборудование</h4>
+          <p>Оснащение для определения полного комплекса характеристик грунтов по ГОСТ</p>
+        </div>
+        <div class="eq-card reveal reveal-d3">
+          <svg class="eq-icon" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="20" y1="6" x2="20" y2="34" stroke="currentColor" stroke-width="1"/>
+            <line x1="6" y1="20" x2="34" y2="20" stroke="currentColor" stroke-width="1"/>
+            <path d="M10 12 Q20 8 30 12" stroke="currentColor" stroke-width="1" fill="none"/>
+            <path d="M10 28 Q20 32 30 28" stroke="currentColor" stroke-width="1" fill="none"/>
+          </svg>
+          <h4>GPS и геодезия</h4>
+          <p>Точное геопозиционирование скважин и инструментальная привязка к местности</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section id="contacts">
+    <div class="container">
+      <div class="sec-label reveal">Связаться с нами</div>
+      <div class="sec-title reveal reveal-d1">Обсудим ваш объект</div>
+      <div class="contact-layout" style="margin-top:56px;">
+
+        <div class="about-card reveal">
+          <div class="ip-name">ИП РИХТЕР О.В.</div>
+          <div class="ip-full">Индивидуальный предприниматель · Ростов-на-Дону</div>
+          <p>Выполняем инженерно-геологические изыскания для объектов любой сложности. Опытная команда, собственная техника, соответствие нормативной документации. Работаем быстро и в срок.</p>
+        </div>
+
+        <div class="contact-items reveal reveal-d1">
+          <a href="tel:+79185824281" class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.9a19.79 19.79 0 01-3.07-8.68A2 2 0 012.86 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/>
+              </svg>
+            </div>
+            <div>
+              <span class="ci-label">Телефон</span>
+              <span class="ci-value">+7 (918) 582-42-81</span>
+            </div>
+          </a>
+          <a href="tel:+79604504572" class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.9a19.79 19.79 0 01-3.07-8.68A2 2 0 012.86 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/>
+              </svg>
+            </div>
+            <div>
+              <span class="ci-label">Телефон</span>
+              <span class="ci-value">+7 (960) 450-45-72</span>
+            </div>
+          </a>
+          <a href="mailto:Rnd.Geology161@yandex.ru" class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div>
+              <span class="ci-label">Email</span>
+              <span class="ci-value">Rnd.Geology161@yandex.ru</span>
+            </div>
+          </a>
+          <a href="https://t.me/GEOLOGY161" class="contact-item" target="_blank">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21.2 4.2L2.6 11.2c-1.2.5-1.2 1.2-.2 1.5l4.6 1.4 1.8 5.5c.2.6.5.8 1 .8s.7-.2 1-.5l2.5-2.4 5 3.7c.9.5 1.6.2 1.8-.8l3.2-15c.3-1.2-.5-1.8-1.1-1.2z"/>
+              </svg>
+            </div>
+            <div>
+              <span class="ci-label">Telegram</span>
+              <span class="ci-value">@GEOLOGY161</span>
+            </div>
+          </a>
+          <div class="contact-item" style="text-decoration:none; cursor:default;">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <span class="ci-label">Местоположение</span>
+              <span class="ci-value">Ростов-на-Дону</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">ИП РИХТЕР О.В. · Инженерно-геологические изыскания</div>
+    <div class="footer-copy">© 2026 · Ростов-на-Дону</div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
