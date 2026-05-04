@@ -451,6 +451,106 @@
       color: rgba(240,235,226,0.2);
     }
 
+    /* ─── PROJECTS ─── */
+    #projects { background: var(--dark); border-top: 1px solid rgba(200,132,26,0.1); }
+
+    .projects-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px; gap: 40px; flex-wrap: wrap;
+    }
+
+    .projects-filter {
+      display: flex; gap: 2px; flex-wrap: wrap;
+    }
+    .pf-btn {
+      background: transparent; border: 1px solid rgba(200,132,26,0.25);
+      color: var(--muted); padding: 8px 18px;
+      font-family: 'Geologica', sans-serif;
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pf-btn.active, .pf-btn:hover {
+      background: var(--ochre); color: var(--dark); border-color: var(--ochre);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    @media(max-width:900px){ .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:560px){ .projects-grid { grid-template-columns: 1fr; } }
+
+    .project-card {
+      background: var(--dark2);
+      padding: 36px 32px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+      position: relative; overflow: hidden;
+      cursor: default;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(200,132,26,0.04) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .project-card:hover { border-color: var(--ochre); background: #1e1c14; }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-category {
+      font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--ochre); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .project-category::before {
+      content: ''; width: 24px; height: 1px; background: var(--ochre); flex-shrink: 0;
+    }
+
+    .project-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.45rem; letter-spacing: 0.06em;
+      color: var(--light); margin-bottom: 8px; line-height: 1.15;
+    }
+    .project-location {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 22px;
+    }
+    .project-desc {
+      font-size: 13px; line-height: 1.85; color: rgba(240,235,226,0.55);
+      margin-bottom: 28px;
+    }
+
+    .project-params {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      border-top: 1px solid rgba(200,132,26,0.12);
+      padding-top: 20px; margin-top: auto;
+    }
+    .project-param { display: flex; flex-direction: column; gap: 4px; }
+    .param-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; color: var(--amber); line-height: 1;
+    }
+    .param-key {
+      font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .project-year {
+      position: absolute; top: 28px; right: 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem; color: rgba(200,132,26,0.08);
+      line-height: 1; pointer-events: none; user-select: none;
+      transition: color 0.3s;
+    }
+    .project-card:hover .project-year { color: rgba(200,132,26,0.14); }
+
+    /* wide card */
+    .project-card.wide {
+      grid-column: span 2;
+    }
+    @media(max-width:900px){ .project-card.wide { grid-column: span 1; } }
+
     /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
@@ -477,6 +577,7 @@
       <a href="#services">Услуги</a>
       <a href="#fieldwork">Полевые работы</a>
       <a href="#equipment">Оборудование</a>
+      <a href="#projects">Проекты</a>
       <a href="#contacts">Контакты</a>
     </div>
     <a href="tel:+79185824281" class="nav-cta">Позвонить</a>
@@ -705,6 +806,101 @@
           <h4>GPS и геодезия</h4>
           <p>Точное геопозиционирование скважин и инструментальная привязка к местности</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="projects-header">
+        <div>
+          <div class="sec-label reveal">Реализованные объекты</div>
+          <div class="sec-title reveal reveal-d1">Наши проекты</div>
+        </div>
+        <p class="sec-body reveal reveal-d2">Выполнили более 300 объектов в Ростовской области, на юге России и новых территориях — от частных домов до крупных промышленных и дорожных объектов.</p>
+      </div>
+
+      <div class="projects-grid">
+
+        <div class="project-card wide reveal">
+          <span class="project-year">2024</span>
+          <div class="project-category">Промышленное строительство</div>
+          <h3>Логистический комплекс — М-4 «Дон»</h3>
+          <div class="project-location">Аксайский район, Ростовская область</div>
+          <p class="project-desc">Инженерно-геологические изыскания под строительство крупного складского терминала. Изучение геологического разреза до 20 м, выявление зон просадочных грунтов, гидрогеологические наблюдения. Составлен технический отчёт в соответствии с СП 47.13330.2016.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">18</span><span class="param-key">скважин</span></div>
+            <div class="project-param"><span class="param-val">20 м</span><span class="param-key">глубина</span></div>
+            <div class="project-param"><span class="param-val">5</span><span class="param-key">точек CPT</span></div>
+            <div class="project-param"><span class="param-val">12</span><span class="param-key">дней</span></div>
+          </div>
+        </div>
+
+        <div class="project-card reveal reveal-d1">
+          <span class="project-year">2024</span>
+          <div class="project-category">Жилищное строительство</div>
+          <h3>ЖК «Южный квартал», секции 3–6</h3>
+          <div class="project-location">Ростов-на-Дону, Советский р-н</div>
+          <p class="project-desc">Изыскания для многоквартирного жилого комплекса: бурение скважин, статическое зондирование, лабораторные исследования грунтов. Определение расчётных характеристик для проектирования фундаментов.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">12</span><span class="param-key">скважин</span></div>
+            <div class="project-param"><span class="param-val">15 м</span><span class="param-key">глубина</span></div>
+            <div class="project-param"><span class="param-val">8</span><span class="param-key">точек CPT</span></div>
+          </div>
+        </div>
+
+        <div class="project-card reveal reveal-d2">
+          <span class="project-year">2023</span>
+          <div class="project-category">Дорожное строительство</div>
+          <h3>Реконструкция автодороги Р-280</h3>
+          <div class="project-location">Новочеркасск — Шахты, 42 км</div>
+          <p class="project-desc">Линейные инженерно-геологические изыскания вдоль трассы автодороги. Изучение состава и состояния грунтов земляного полотна, картирование слабых зон и потенциально нестабильных участков.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">34</span><span class="param-key">скважины</span></div>
+            <div class="project-param"><span class="param-val">42 км</span><span class="param-key">трасса</span></div>
+            <div class="project-param"><span class="param-val">8 м</span><span class="param-key">глубина</span></div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <span class="project-year">2023</span>
+          <div class="project-category">Промышленность</div>
+          <h3>Расширение завода СтройМаш</h3>
+          <div class="project-location">Батайск, Ростовская область</div>
+          <p class="project-desc">Дополнительные изыскания под расширение производственного корпуса и монтаж тяжёлого прессового оборудования. Оценка несущей способности грунтового основания под динамические нагрузки.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">6</span><span class="param-key">скважин</span></div>
+            <div class="project-param"><span class="param-val">25 м</span><span class="param-key">глубина</span></div>
+          </div>
+        </div>
+
+        <div class="project-card reveal reveal-d1">
+          <span class="project-year">2024</span>
+          <div class="project-category">Инфраструктура</div>
+          <h3>Газопровод высокого давления</h3>
+          <div class="project-location">Сальский район, 18 км трассы</div>
+          <p class="project-desc">Изыскания для проектирования линейного объекта: бурение скважин по трассе, определение коррозионной агрессивности грунтов, гидрогеологические наблюдения в зонах пересечения водотоков.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">22</span><span class="param-key">скважины</span></div>
+            <div class="project-param"><span class="param-val">18 км</span><span class="param-key">трасса</span></div>
+            <div class="project-param"><span class="param-val">3</span><span class="param-key">водотока</span></div>
+          </div>
+        </div>
+
+        <div class="project-card reveal reveal-d2">
+          <span class="project-year">2022</span>
+          <div class="project-category">Индивидуальная застройка</div>
+          <h3>Элитный коттеджный посёлок</h3>
+          <div class="project-location">Мясниковский район, РО</div>
+          <p class="project-desc">Изыскания на территории 6,5 га под строительство 24 коттеджей с подвалами и плавательными бассейнами. Детальное картирование просадочных грунтов, рекомендации по подготовке основания.</p>
+          <div class="project-params">
+            <div class="project-param"><span class="param-val">24</span><span class="param-key">скважины</span></div>
+            <div class="project-param"><span class="param-val">6.5 га</span><span class="param-key">площадь</span></div>
+            <div class="project-param"><span class="param-val">12 м</span><span class="param-key">глубина</span></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
